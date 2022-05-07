@@ -102,8 +102,8 @@ export async function saveAccountSnapshot(event: SubstrateEvent, timestamp: Date
 }
 
 export async function saveTransferred(event: SubstrateEvent, timestamp: Date, blockNumber: bigint): Promise<void> { 
-    const [account, account2, balance] = event.event.data.toJSON() as [string,string, bigint];
-    if (balance < 10000000000000) {
+    const [account, account2, amount] = event.event.data.toJSON() as [string,string, bigint];
+    if (amount < 10000000000000) {
         logger.info("Ignoring Transfer less than 10000 from id!: " + account);   
         return 
     }
@@ -119,7 +119,8 @@ export async function saveTransferred(event: SubstrateEvent, timestamp: Date, bl
         });
     }
     record.accountFrom = account;
-    record.accountTo = account;
+    record.accountTo = account2;
+    record.amount = amount;
     record.blockNumber = blockNumber
     record.timestamp = timestamp
 
