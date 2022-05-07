@@ -1,0 +1,28 @@
+type Account @entity {
+  id: ID!
+  account: String
+  freeBalance: BigInt
+  reserveBalance: BigInt
+  totalBalance: BigInt
+  blockNumber: BigInt
+  timestamp: Date
+}
+
+type AccountSnapshot @entity {
+  id: ID!
+  account: String
+  freeBalance: BigInt
+  reserveBalance: BigInt
+  totalBalance: BigInt
+  blockNumber: BigInt
+  timestamp: Date
+}
+
+type Transfer @entity {
+  id: ID!
+  accountFrom: String
+  accountTo: String
+  amount: BigInt
+  blockNumber: BigInt
+  timestamp: Date
+}
