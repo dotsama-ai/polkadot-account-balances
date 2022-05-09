@@ -103,13 +103,14 @@ export async function saveAccountSnapshot(event: SubstrateEvent, timestamp: Date
 
 export async function saveTransferred(event: SubstrateEvent, timestamp: Date, blockNumber: bigint): Promise<void> { 
     const [account, account2, amount] = event.event.data.toJSON() as [string,string, bigint];
-    if (amount < 10000000000000) {
-        logger.info("Ignoring Transfer less than 10000 from id!: " + account);   
+    if (amount < 100000000000000) {
+        logger.info("Ignoring Transfer less than 10000 DOT from id!: " + account);
         return 
     }
 
     logger.info("Saving Transferred from id!: " + account);
-
+    //logger.info("amount " + amount)
+    //logger.info("bigint amount " + BigInt(amount))
     let eventID = event.phase.asApplyExtrinsic.toString()
     let id = `${blockNumber.toString()}-${eventID}`;
     let record = await Transfer.get(id);
@@ -120,7 +121,7 @@ export async function saveTransferred(event: SubstrateEvent, timestamp: Date, bl
     }
     record.accountFrom = account;
     record.accountTo = account2;
-    record.amount = amount;
+    record.amount = BigInt(amount);
     record.blockNumber = blockNumber
     record.timestamp = timestamp
 
@@ -131,5 +132,5 @@ export async function saveTransferred(event: SubstrateEvent, timestamp: Date, bl
         logger.info("saveTransferred error => " + err)
         logger.info("====> event record=> " + JSON.stringify(event))
 
-    });        
+    });
 }
