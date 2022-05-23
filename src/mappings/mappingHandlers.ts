@@ -78,7 +78,7 @@ export async function saveAccountSnapshot(event: SubstrateEvent, timestamp: Date
         let record = await AccountSnapshot.get(id);
         if (!record) {
             record = AccountSnapshot.create({
-                id: account,
+                id: id,
                 account: account
               });
         }
