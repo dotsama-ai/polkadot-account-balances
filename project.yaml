@@ -87,8 +87,3 @@ dataSources:
           filter:
             module: staking
             method: Slashed
-        - handler: handleTransferred
-          kind: substrate/EventHandler
-          filter:
-            module: balances
-            method: Transfer

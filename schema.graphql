@@ -17,12 +17,3 @@ type AccountSnapshot @entity {
   blockNumber: BigInt
   timestamp: Date
 }
-
-type Transfer @entity {
-  id: ID!
-  accountFrom: String
-  accountTo: String
-  amount: BigInt
-  blockNumber: BigInt
-  timestamp: Date
-}

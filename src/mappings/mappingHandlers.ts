@@ -3,12 +3,6 @@ import {Account, AccountSnapshot, Transfer} from "../types";
 import { AccountInfo } from "@polkadot/types/interfaces/system";
 import {getEventAccounts, readEspecialAccounts} from "../handlers";
 
-export async function handleTransferred(event: SubstrateEvent): Promise<void> {
-    let blockNumber = event.block.block.header.number.toBigInt()    
-    let timestamp = event.block.timestamp;
-    await saveTransferred(event, timestamp, blockNumber)       
-}
-
 export async function handleEvent(event: SubstrateEvent): Promise<void> {
     let blockNumber = event.block.block.header.number.toBigInt()    
     let accountsInEvent = await getEventAccounts(event)
@@ -99,38 +93,4 @@ export async function saveAccountSnapshot(event: SubstrateEvent, timestamp: Date
     } else {
         logger.info("No raw==============================")
     }
-}
-
-export async function saveTransferred(event: SubstrateEvent, timestamp: Date, blockNumber: bigint): Promise<void> { 
-    const [account, account2, amount] = event.event.data.toJSON() as [string,string, bigint];
-    if (amount < 100000000000000) {
-        logger.info("Ignoring Transfer less than 10000 DOT from id!: " + account);
-        return 
-    }
-
-    logger.info("Saving Transferred from id!: " + account);
-    //logger.info("amount " + amount)
-    //logger.info("bigint amount " + BigInt(amount))
-    let eventID = event.phase.asApplyExtrinsic.toString()
-    let id = `${blockNumber.toString()}-${eventID}`;
-    let record = await Transfer.get(id);
-    if (!record) {
-        record = Transfer.create({
-            id: account,
-        });
-    }
-    record.accountFrom = account;
-    record.accountTo = account2;
-    record.amount = BigInt(amount);
-    record.blockNumber = blockNumber
-    record.timestamp = timestamp
-
-    await record.save().then((ress) => {
-        //logger.info("totalAccount save =>"+ ress)
-    })
-    .catch((err) => {
-        logger.info("saveTransferred error => " + err)
-        logger.info("====> event record=> " + JSON.stringify(event))
-
-    });
 }
