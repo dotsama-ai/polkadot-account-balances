@@ -1,5 +1,5 @@
 import {SubstrateEvent} from "@subql/types";
-import {Account, AccountSnapshot, Transfer} from "../types";
+import {Account, AccountSnapshot} from "../types";
 import { AccountInfo } from "@polkadot/types/interfaces/system";
 import {getEventAccounts, readEspecialAccounts} from "../handlers";
 
